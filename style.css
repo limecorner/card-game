@@ -1,0 +1,35 @@
+#cards{
+  outline: solid 1px tomato;
+
+  display: flex;
+  flex-wrap: wrap;
+  width: 95%;
+  margin: auto;
+}
+
+.card{
+  flex: 0 1 7%;
+  border: solid 1px #ccc;
+  margin: 0.2%;
+  height: 8vw;
+
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+/* .card inside */
+.card .point{
+  margin: 5%;
+  /* padding: 5%; */
+}
+
+.card .point:last-child{
+  transform: rotate(180deg);
+}
+
+.card img{
+  width: 50%;
+  align-self: center;
+}
+

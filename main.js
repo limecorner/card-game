@@ -7,6 +7,7 @@ const symbols = ['https://assets-lighthouse.alphacamp.co/uploads/image/file/1798
 const view = {
   displayCards() {
     const cardsArray = Array.from(Array(52).keys())
+    utility.shuffle(cardsArray) //試玩時可拿掉
     let cardsHTML = ''
     cardsArray.forEach(index => {
       cardsHTML += this.getCardContent(index)
@@ -34,6 +35,15 @@ const view = {
         return 'K'
     }
     return point
+  }
+}
+
+const utility = {
+  shuffle(arr) {
+    for (let index = arr.length - 1; index > 0; index--) {
+      const randomIndex = Math.floor(Math.random() * (index + 1));
+      [arr[index], arr[randomIndex]] = [arr[randomIndex], arr[index]];
+    }
   }
 }
 

@@ -56,13 +56,47 @@ const view = {
 }
 
 const model = {
-  revealedCards: []
+  revealedCards: [],
+  isPointSame(card1, card2) {
+    const point1 = Number(card1.dataset.index) % 13
+    const point2 = Number(card2.dataset.index) % 13
+    return point1 === point2
+  }
 }
 
 const controller = {
-  currentState: GAME_STATE['FirstCardAwaits'],
+  currentState: GAME_STATE.FirstCardAwaits,
   generateCards() {
     view.displayCards(utility.getRandomNumberArray(52))
+  },
+  dispatchCardAction(card) {
+    if (!card.matches('.back')) return
+    switch (this.currentState) {
+      case GAME_STATE.FirstCardAwaits:
+        view.flipCard(card)
+        model.revealedCards.push(card)
+        this.currentState = GAME_STATE.SecondCardAwaits
+        break
+      case GAME_STATE.SecondCardAwaits:
+        view.flipCard(card)
+        model.revealedCards.push(card)
+        console.log(model.revealedCards)
+        if (model.isPointSame(...model.revealedCards)) {
+          console.log('same')
+          this.currentState = GAME_STATE.CardsMatch
+          console.log('this.currentState', this.currentState)
+        } else {
+          console.log('diff')
+          view.flipCard(model.revealedCards[0])
+          view.flipCard(model.revealedCards[1])
+          this.currentState = GAME_STATE.CardsMatchFail
+          console.log('this.currentState', this.currentState)
+        }
+        model.revealedCards = []
+        this.currentState = GAME_STATE.FirstCardAwaits
+        break
+    }
+    console.log('this.currentState', this.currentState)
   }
 }
 
@@ -84,6 +118,6 @@ controller.generateCards()
 
 document.querySelectorAll('.card').forEach(card => {
   card.addEventListener('click', () => {
-    view.flipCard(card)
+    controller.dispatchCardAction(card)
   })
 })

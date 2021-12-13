@@ -52,11 +52,23 @@ const view = {
         return 'K'
     }
     return point
+  },
+  renderLog() {
+    if (controller.currentState === GAME_STATE.CardsMatch) {
+      model.score += 10
+    }
+    model.triedTimes++
+    const logScore = document.querySelector('.log-score')
+    const logTime = document.querySelector('.log-time')
+    logScore.innerText = `Score:${model.score}`
+    logTime.innerText = `You've tried: ${model.triedTimes} times`
   }
 }
 
 const model = {
   revealedCards: [],
+  score: 0,
+  triedTimes: 0,
   isPointSame(card1, card2) {
     const point1 = Number(card1.dataset.index) % 13
     const point2 = Number(card2.dataset.index) % 13
@@ -80,23 +92,22 @@ const controller = {
       case GAME_STATE.SecondCardAwaits:
         view.flipCard(card)
         model.revealedCards.push(card)
-        console.log(model.revealedCards)
         if (model.isPointSame(...model.revealedCards)) {
-          console.log('same')
           this.currentState = GAME_STATE.CardsMatch
-          console.log('this.currentState', this.currentState)
+          view.renderLog()
+          if (model.score === 260) {
+            this.currentState = GAME_STATE.GameFinished
+          }
         } else {
-          console.log('diff')
+          this.currentState = GAME_STATE.CardsMatchFail
+          view.renderLog()
           view.flipCard(model.revealedCards[0])
           view.flipCard(model.revealedCards[1])
-          this.currentState = GAME_STATE.CardsMatchFail
-          console.log('this.currentState', this.currentState)
         }
         model.revealedCards = []
         this.currentState = GAME_STATE.FirstCardAwaits
         break
     }
-    console.log('this.currentState', this.currentState)
   }
 }
 

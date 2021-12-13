@@ -1,5 +1,50 @@
+/* header */
+#header{
+  /* outline: 1px solid tomato; */
+  display: flex;
+  justify-content: end;
+
+  width: 95%;
+  margin: 20px auto;
+}
+
+.text-section{
+  /* outline: 1px solid tomato; */
+  width: 30%;
+  text-align: end;
+}
+
+.text-section .title-section{
+  /* outline: 1px solid tomato; */
+  display: flex;
+  justify-content: end;
+  margin-top: 10px;
+
+}
+
+.text-section img{
+  /* outline: 1px solid tomato; */
+  width: 30px;
+  margin-right: 10px;
+}
+
+.text-section p{
+  margin: 0;
+}
+.text-section .log-score{
+  margin-top: 20px;
+  color: blue;
+}
+
+.text-section .title{
+  /* outline: 1px solid tomato; */
+  font-weight: 900;
+  font-size: 24px;
+}
+
+/* cards */
 #cards{
-  outline: solid 1px tomato;
+  /* outline: solid 1px tomato; */
 
   display: flex;
   flex-wrap: wrap;
@@ -7,6 +52,7 @@
   margin: auto;
 }
 
+/* card */
 .card{
   flex: 0 1 7%;
   border: solid 1px #ccc;

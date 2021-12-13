@@ -10,18 +10,29 @@ const view = {
     utility.shuffle(cardsArray) //試玩時可拿掉
     let cardsHTML = ''
     cardsArray.forEach(index => {
-      cardsHTML += this.getCardContent(index)
+      cardsHTML += this.getCardElement(index)
     })
     cardsElement.innerHTML = cardsHTML
+  },
+  getCardElement(index) {
+    return `<div class="card back" data-index="${index}"></div>`
   },
   getCardContent(index) {
     const point = this.transformNumber((index % 13) + 1)
     const symbol = symbols[Math.floor(index / 13)]
-    return `<div class="card">
-      <p class="point">${point}</p>    
+    return `<p class="point">${point}</p>
       <img src="${symbol}" alt="">
-      <p class="point">${point}</p>
-    </div>`
+      <p class="point">${point}</p>`
+  },
+  flipCard(card) {
+    if (card.matches('.back')) {
+      const index = Number(card.dataset.index)
+      card.classList.remove('back')
+      card.innerHTML = this.getCardContent(index)
+    } else {
+      card.classList.add('back')
+      card.innerHTML = null
+    }
   },
   transformNumber(point) {
     switch (point) {
@@ -48,3 +59,9 @@ const utility = {
 }
 
 view.displayCards()
+
+document.querySelectorAll('.card').forEach(card => {
+  card.addEventListener('click', () => {
+    view.flipCard(card)
+  })
+})

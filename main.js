@@ -4,12 +4,18 @@ const symbols = ['https://assets-lighthouse.alphacamp.co/uploads/image/file/1798
   , 'https://assets-lighthouse.alphacamp.co/uploads/image/file/17991/diamonds.png'
   , 'https://assets-lighthouse.alphacamp.co/uploads/image/file/17988/__.png']
 
+const GAME_STATE = {
+  FirstCardAwaits: 'FirstCardAwaits',
+  SecondCardAwaits: 'SecondCardAwaits',
+  CardsMatch: 'CardsMatch',
+  CardsMatchFail: 'CardsMatchFail',
+  GameFinished: 'GameFinished'
+}
+
 const view = {
-  displayCards() {
-    const cardsArray = Array.from(Array(52).keys())
-    utility.shuffle(cardsArray) //試玩時可拿掉
+  displayCards(indexes) {
     let cardsHTML = ''
-    cardsArray.forEach(index => {
+    indexes.forEach(index => {
       cardsHTML += this.getCardElement(index)
     })
     cardsElement.innerHTML = cardsHTML
@@ -49,7 +55,23 @@ const view = {
   }
 }
 
+const model = {
+  revealedCards: []
+}
+
+const controller = {
+  currentState: GAME_STATE['FirstCardAwaits'],
+  generateCards() {
+    view.displayCards(utility.getRandomNumberArray(52))
+  }
+}
+
 const utility = {
+  getRandomNumberArray(count) {
+    const cardsArray = Array.from(Array(count).keys())
+    this.shuffle(cardsArray) //試玩時可拿掉
+    return cardsArray
+  },
   shuffle(arr) {
     for (let index = arr.length - 1; index > 0; index--) {
       const randomIndex = Math.floor(Math.random() * (index + 1));
@@ -58,7 +80,7 @@ const utility = {
   }
 }
 
-view.displayCards()
+controller.generateCards()
 
 document.querySelectorAll('.card').forEach(card => {
   card.addEventListener('click', () => {

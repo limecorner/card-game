@@ -54,8 +54,8 @@
 
 /* card */
 .card{
-  flex: 0 1 7%;
-  border: solid 1px #ccc;
+  flex: 0 1 6.5%;
+  border: solid 2px #ccc;
   margin: 0.2%;
   height: 8vw;
 
@@ -86,4 +86,13 @@
 
 .matched-cards{
   background-color: #ccc;
+}
+
+.match-fail-cards{
+  animation: wrongAnimation 0.2s 5;
+}
+
+@keyframes wrongAnimation {
+  0% {}
+  100% {border: 2px solid #ffd54f;}
 }

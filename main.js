@@ -63,13 +63,19 @@ const view = {
     logScore.innerText = `Score:${model.score}`
     logTime.innerText = `You've tried: ${model.triedTimes} times`
   },
-  addCssToMatchedCards(card) {
-    card.classList.add('matched-cards')
+  addCssToMatchedCards(...cards) {
+    cards.forEach(card => {
+      card.classList.add('matched-cards')
+    })
   },
-  addCssToMatchFailedCards(card) {
-    setTimeout(() => {
-      view.flipCard(card)
-    }, 1000)
+  addCssToMatchFailedCards(...cards) {
+    cards.forEach(card => {
+      card.classList.add('match-fail-cards')
+      setTimeout(() => {
+        card.classList.remove('match-fail-cards')
+        view.flipCard(card)
+      }, 1000)
+    })
   }
 }
 
@@ -102,8 +108,7 @@ const controller = {
         model.revealedCards.push(card)
         if (model.isPointSame(...model.revealedCards)) { // 配對成功
           this.currentState = GAME_STATE.CardsMatch
-          view.addCssToMatchedCards(model.revealedCards[0])
-          view.addCssToMatchedCards(model.revealedCards[1])
+          view.addCssToMatchedCards(...model.revealedCards)
           view.renderLog()
           if (model.score === 260) {
             this.currentState = GAME_STATE.GameFinished
@@ -111,8 +116,7 @@ const controller = {
         } else { // 配對失敗
           this.currentState = GAME_STATE.CardsMatchFail
           view.renderLog()
-          view.addCssToMatchFailedCards(model.revealedCards[0])
-          view.addCssToMatchFailedCards(model.revealedCards[1])
+          view.addCssToMatchFailedCards(...model.revealedCards)
         }
         model.revealedCards = []
         this.currentState = GAME_STATE.FirstCardAwaits

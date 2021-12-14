@@ -76,9 +76,19 @@ const view = {
         view.flipCard(card)
       }, 1000)
     })
+  },
+  showGameFinished() {
+    const div = document.createElement('div')
+    div.classList.add('completed')
+    div.innerHTML = `
+      <p>Complete!</p>
+      <p>Score: ${model.score}</p>
+      <p>You've tried: ${model.triedTimes} times</p>
+    `
+    const header = document.querySelector('#header')
+    header.before(div)
   }
 }
-
 const model = {
   revealedCards: [],
   score: 0,
@@ -112,11 +122,13 @@ const controller = {
           view.renderLog()
           if (model.score === 260) {
             this.currentState = GAME_STATE.GameFinished
+            view.showGameFinished()
+            return
           }
         } else { // 配對失敗
           this.currentState = GAME_STATE.CardsMatchFail
-          view.renderLog()
           view.addCssToMatchFailedCards(...model.revealedCards)
+          view.renderLog()
         }
         model.revealedCards = []
         this.currentState = GAME_STATE.FirstCardAwaits
@@ -128,7 +140,7 @@ const controller = {
 const utility = {
   getRandomNumberArray(count) {
     const cardsArray = Array.from(Array(count).keys())
-    // this.shuffle(cardsArray) //試玩時可拿掉
+    this.shuffle(cardsArray) //試玩時可拿掉
     return cardsArray
   },
   shuffle(arr) {

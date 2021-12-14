@@ -62,6 +62,14 @@ const view = {
     const logTime = document.querySelector('.log-time')
     logScore.innerText = `Score:${model.score}`
     logTime.innerText = `You've tried: ${model.triedTimes} times`
+  },
+  addCssToMatchedCards(card) {
+    card.classList.add('matched-cards')
+  },
+  addCssToMatchFailedCards(card) {
+    setTimeout(() => {
+      view.flipCard(card)
+    }, 1000)
   }
 }
 
@@ -92,17 +100,19 @@ const controller = {
       case GAME_STATE.SecondCardAwaits:
         view.flipCard(card)
         model.revealedCards.push(card)
-        if (model.isPointSame(...model.revealedCards)) {
+        if (model.isPointSame(...model.revealedCards)) { // 配對成功
           this.currentState = GAME_STATE.CardsMatch
+          view.addCssToMatchedCards(model.revealedCards[0])
+          view.addCssToMatchedCards(model.revealedCards[1])
           view.renderLog()
           if (model.score === 260) {
             this.currentState = GAME_STATE.GameFinished
           }
-        } else {
+        } else { // 配對失敗
           this.currentState = GAME_STATE.CardsMatchFail
           view.renderLog()
-          view.flipCard(model.revealedCards[0])
-          view.flipCard(model.revealedCards[1])
+          view.addCssToMatchFailedCards(model.revealedCards[0])
+          view.addCssToMatchFailedCards(model.revealedCards[1])
         }
         model.revealedCards = []
         this.currentState = GAME_STATE.FirstCardAwaits
@@ -114,7 +124,7 @@ const controller = {
 const utility = {
   getRandomNumberArray(count) {
     const cardsArray = Array.from(Array(count).keys())
-    this.shuffle(cardsArray) //試玩時可拿掉
+    // this.shuffle(cardsArray) //試玩時可拿掉
     return cardsArray
   },
   shuffle(arr) {
